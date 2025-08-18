@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'screen/dashboard.dart';
 import 'screen/course_info.dart';
 
-
 void main() {
   runApp(MyApp());
 }
@@ -50,7 +49,7 @@ class _MainNavigationState extends State<MainNavigation> {
   void _onAttendanceSaved(Map<String, dynamic> data) {
     setState(() {
       _attendanceData = data;
-      _selectedIndex = 0; // ไปหน้า Dashboard
+      _selectedIndex = 0; // ไปยังหน้า Dashboard
     });
   }
 
@@ -70,9 +69,7 @@ class _MainNavigationState extends State<MainNavigation> {
         elevation: 8,
         onPressed: () => _onItemTapped(1),
         child: Icon(Icons.checklist, size: 36, color: Colors.white),
-        shape: CircleBorder(
-          side: BorderSide(color: Colors.white, width: 4),
-        ),
+        shape: CircleBorder(side: BorderSide(color: Colors.white, width: 4)),
       ),
     );
   }
@@ -126,7 +123,11 @@ class _MainNavigationState extends State<MainNavigation> {
     );
   }
 
-  Widget _buildNavItem({required IconData icon, required String label, required int index}) {
+  Widget _buildNavItem({
+    required IconData icon,
+    required String label,
+    required int index,
+  }) {
     final isSelected = _selectedIndex == index;
     return GestureDetector(
       onTap: () => _onItemTapped(index),
@@ -165,11 +166,7 @@ class Student {
   });
 }
 
-enum AttendanceStatus {
-  present,
-  absent,
-  leave,
-}
+enum AttendanceStatus { present, absent, leave }
 
 // ปรับ AttendanceScreen ให้รองรับปุ่มล้างค่า
 class AttendanceScreen extends StatefulWidget {
@@ -194,10 +191,9 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
   void _addStudent() {
     if (_nameController.text.isNotEmpty && _idController.text.isNotEmpty) {
       setState(() {
-        students.add(Student(
-          id: _idController.text,
-          name: _nameController.text,
-        ));
+        students.add(
+          Student(id: _idController.text, name: _nameController.text),
+        );
       });
       _nameController.clear();
       _idController.clear();
@@ -210,10 +206,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text(
-            'เพิ่มนักศึกษา',
-            style: TextStyle(color: Colors.white),
-          ),
+          title: Text('เพิ่มนักศึกษา', style: TextStyle(color: Colors.white)),
           backgroundColor: Color(0xFF1976D2),
           content: Column(
             mainAxisSize: MainAxisSize.min,
@@ -272,17 +265,27 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
     Map<String, dynamic> attendanceData = {
       'date': DateTime.now().toString().split(' ')[0],
       'time': TimeOfDay.now().format(context),
-      'students': students.map((student) => {
-        'id': student.id,
-        'name': student.name,
-        'status': student.status.toString().split('.').last,
-      }).toList(),
+      'students': students
+          .map(
+            (student) => {
+              'id': student.id,
+              'name': student.name,
+              'status': student.status.toString().split('.').last,
+            },
+          )
+          .toList(),
       'summary': {
         'total': students.length,
-        'present': students.where((s) => s.status == AttendanceStatus.present).length,
-        'absent': students.where((s) => s.status == AttendanceStatus.absent).length,
-        'leave': students.where((s) => s.status == AttendanceStatus.leave).length,
-      }
+        'present': students
+            .where((s) => s.status == AttendanceStatus.present)
+            .length,
+        'absent': students
+            .where((s) => s.status == AttendanceStatus.absent)
+            .length,
+        'leave': students
+            .where((s) => s.status == AttendanceStatus.leave)
+            .length,
+      },
     };
 
     widget.onAttendanceSaved(attendanceData);
