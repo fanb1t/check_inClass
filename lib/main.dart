@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'screen/dashboard.dart';
-import 'screen/course_info.dart';
+import 'dashboard.dart';
+import 'course_info.dart';
 
 
 /// จุดเริ่มต้นของแอป
