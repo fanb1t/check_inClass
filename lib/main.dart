@@ -391,7 +391,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                 child: ElevatedButton.icon(
                   onPressed: _showAddStudentDialog,
                   icon: Icon(Icons.person_add),
-                  label: Text('เพิ่มนักศึกษา'),
+                  label: Text('เพิ่ม'),
                 ),
               ),
               SizedBox(width: 8),
@@ -411,7 +411,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                 child: ElevatedButton.icon(
                   onPressed: _saveAttendance,
                   icon: Icon(Icons.save),
-                  label: Text('บันทึกและดูสรุป'),
+                  label: Text('บันทึก'),
                 ),
               ),
             ],
