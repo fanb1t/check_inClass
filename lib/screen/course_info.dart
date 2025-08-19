@@ -93,131 +93,112 @@ class _CourseInfoScreenState extends State<CourseInfoScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('ข้อมูลรายวิชา'),
-        backgroundColor: Color(0xFF1565C0),
-        foregroundColor: Colors.white,
-        actions: [
-          IconButton(
-            icon: Icon(isEditing ? Icons.save : Icons.edit),
-            onPressed: _toggleEdit,
-          ),
-          if (isEditing)
-            IconButton(
-              icon: Icon(Icons.cancel),
-              onPressed: _cancelEdit,
-            ),
-        ],
-      ),
-      backgroundColor: Color(0xFFE3F2FD),
-      body: SingleChildScrollView(
-        padding: EdgeInsets.all(16),
-        child: Column(
-          children: [
-            // Header Card
-            Container(
-              width: double.infinity,
-              padding: EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [Color(0xFF1976D2), Color(0xFF42A5F5)],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
+    return SingleChildScrollView(
+      padding: EdgeInsets.all(16),
+      child: Column(
+        children: [
+          // Header Card
+          Container(
+            width: double.infinity,
+            padding: EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [Color(0xFF1976D2), Color(0xFF42A5F5)],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+              borderRadius: BorderRadius.circular(16),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black26,
+                  blurRadius: 8,
+                  offset: Offset(0, 4),
                 ),
-                borderRadius: BorderRadius.circular(16),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black26,
-                    blurRadius: 8,
-                    offset: Offset(0, 4),
-                  ),
-                ],
-              ),
-              child: Column(
-                children: [
-                  Icon(
-                    Icons.school,
+              ],
+            ),
+            child: Column(
+              children: [
+                Icon(
+                  Icons.school,
+                  color: Colors.white,
+                  size: 48,
+                ),
+                SizedBox(height: 12),
+                Text(
+                  isEditing ? 'แก้ไขข้อมูลรายวิชา' : 'ข้อมูลรายวิชา',
+                  style: TextStyle(
                     color: Colors.white,
-                    size: 48,
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
                   ),
-                  SizedBox(height: 12),
-                  Text(
-                    isEditing ? 'แก้ไขข้อมูลรายวิชา' : 'ข้อมูลรายวิชา',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
-            SizedBox(height: 24),
+          ),
+          SizedBox(height: 24),
 
-            // ข้อมูลรายวิชา
-            Container(
-              padding: EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(12),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black12,
-                    blurRadius: 6,
-                    offset: Offset(0, 2),
-                  ),
-                ],
-              ),
-              child: Column(
-                children: [
-                  _buildInfoField(
-                    'ชื่อรายวิชา',
-                    _courseNameController,
-                    courseInfo.courseName,
-                    Icons.book,
-                  ),
-                  SizedBox(height: 16),
-                  _buildInfoField(
-                    'รหัสวิชา',
-                    _courseCodeController,
-                    courseInfo.courseCode,
-                    Icons.code,
-                  ),
-                  SizedBox(height: 16),
-                  _buildInfoField(
-                    'อาจารย์ผู้สอน',
-                    _instructorController,
-                    courseInfo.instructor,
-                    Icons.person,
-                  ),
-                  SizedBox(height: 16),
-                  _buildInfoField(
-                    'วันเวลาเรียน',
-                    _scheduleController,
-                    courseInfo.schedule,
-                    Icons.schedule,
-                  ),
-                  SizedBox(height: 16),
-                  _buildInfoField(
-                    'ห้องเรียน',
-                    _roomController,
-                    courseInfo.room,
-                    Icons.location_on,
-                  ),
-                  SizedBox(height: 16),
-                  _buildInfoField(
-                    'คำอธิบายรายวิชา',
-                    _descriptionController,
-                    courseInfo.description,
-                    Icons.description,
-                    maxLines: 3,
-                  ),
-                ],
-              ),
+          // ข้อมูลรายวิชา
+          Container(
+            padding: EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black12,
+                  blurRadius: 6,
+                  offset: Offset(0, 2),
+                ),
+              ],
             ),
-          ],
-        ),
+            child: Column(
+              children: [
+                _buildInfoField(
+                  'ชื่อรายวิชา',
+                  _courseNameController,
+                  courseInfo.courseName,
+                  Icons.book,
+                ),
+                SizedBox(height: 16),
+                _buildInfoField(
+                  'รหัสวิชา',
+                  _courseCodeController,
+                  courseInfo.courseCode,
+                  Icons.code,
+                ),
+                SizedBox(height: 16),
+                _buildInfoField(
+                  'อาจารย์ผู้สอน',
+                  _instructorController,
+                  courseInfo.instructor,
+                  Icons.person,
+                ),
+                SizedBox(height: 16),
+                _buildInfoField(
+                  'วันเวลาเรียน',
+                  _scheduleController,
+                  courseInfo.schedule,
+                  Icons.schedule,
+                ),
+                SizedBox(height: 16),
+                _buildInfoField(
+                  'ห้องเรียน',
+                  _roomController,
+                  courseInfo.room,
+                  Icons.location_on,
+                ),
+                SizedBox(height: 16),
+                _buildInfoField(
+                  'คำอธิบายรายวิชา',
+                  _descriptionController,
+                  courseInfo.description,
+                  Icons.description,
+                  maxLines: 3,
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }

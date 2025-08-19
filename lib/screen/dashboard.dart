@@ -1,38 +1,29 @@
 import 'package:flutter/material.dart';
 
 class DashboardScreen extends StatelessWidget {
-  final Map<String, dynamic>? attendanceData; // เปลี่ยนเป็น nullable
+  final Map<String, dynamic>? attendanceData;
 
   const DashboardScreen({Key? key, required this.attendanceData}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     if (attendanceData == null) {
-      // กรณีไม่มีข้อมูล
-      return Scaffold(
-        appBar: AppBar(
-          title: Text('Dashboard การเข้าเรียน'),
-          backgroundColor: Color(0xFF1565C0),
-          foregroundColor: Colors.white,
-        ),
-        backgroundColor: Color(0xFFE3F2FD),
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(Icons.info_outline, color: Colors.grey, size: 80),
-              SizedBox(height: 16),
-              Text(
-                'ยังไม่มีข้อมูลการเช็คชื่อ',
-                style: TextStyle(fontSize: 20, color: Colors.grey[700]),
-              ),
-              SizedBox(height: 8),
-              Text(
-                'กรุณาบันทึกการเช็คชื่อก่อน',
-                style: TextStyle(fontSize: 16, color: Colors.grey[500]),
-              ),
-            ],
-          ),
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.info_outline, color: Colors.grey, size: 80),
+            SizedBox(height: 16),
+            Text(
+              'ยังไม่มีข้อมูลการเช็คชื่อ',
+              style: TextStyle(fontSize: 20, color: Colors.grey[700]),
+            ),
+            SizedBox(height: 8),
+            Text(
+              'กรุณาบันทึกการเช็คชื่อก่อน',
+              style: TextStyle(fontSize: 16, color: Colors.grey[500]),
+            ),
+          ],
         ),
       );
     }
@@ -40,162 +31,154 @@ class DashboardScreen extends StatelessWidget {
     final summary = attendanceData!['summary'];
     final students = attendanceData!['students'] as List;
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Dashboard การเข้าเรียน'),
-        backgroundColor: Color(0xFF1565C0),
-        foregroundColor: Colors.white,
-      ),
-      backgroundColor: Color(0xFFE3F2FD),
-      body: SingleChildScrollView(
-        padding: EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // สรุปการเข้าเรียน
-            Container(
-              width: double.infinity,
-              padding: EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [Color(0xFF1976D2), Color(0xFF42A5F5)],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
-                borderRadius: BorderRadius.circular(16),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black26,
-                    blurRadius: 8,
-                    offset: Offset(0, 4),
-                  ),
-                ],
+    return SingleChildScrollView(
+      padding: EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // สรุปการเข้าเรียน
+          Container(
+            width: double.infinity,
+            padding: EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [Color(0xFF1976D2), Color(0xFF42A5F5)],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
               ),
-              child: Column(
-                children: [
-                  Text(
-                    'สรุปการเข้าเรียน',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
+              borderRadius: BorderRadius.circular(16),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black26,
+                  blurRadius: 8,
+                  offset: Offset(0, 4),
+                ),
+              ],
+            ),
+            child: Column(
+              children: [
+                Text(
+                  'สรุปการเข้าเรียน',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(height: 16),
+                Text(
+                  'วันที่: ${attendanceData!['date']} เวลา: ${attendanceData!['time']}',
+                  style: TextStyle(color: Colors.white70, fontSize: 16),
+                ),
+                SizedBox(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    _buildSummaryCard(
+                      'ทั้งหมด',
+                      summary['total'].toString(),
+                      Icons.people,
+                      Colors.white,
                     ),
+                    _buildSummaryCard(
+                      'มาเรียน',
+                      summary['present'].toString(),
+                      Icons.check_circle,
+                      Colors.greenAccent,
+                    ),
+                    _buildSummaryCard(
+                      'ลา',
+                      summary['leave'].toString(),
+                      Icons.schedule,
+                      Colors.orangeAccent,
+                    ),
+                    _buildSummaryCard(
+                      'ขาดเรียน',
+                      summary['absent'].toString(),
+                      Icons.cancel,
+                      Colors.redAccent,
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          SizedBox(height: 24),
+          
+          // รายละเอียดนักศึกษา
+          Container(
+            padding: EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black12,
+                  blurRadius: 6,
+                  offset: Offset(0, 2),
+                ),
+              ],
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'รายละเอียดการเข้าเรียน',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF0D47A1),
                   ),
-                  SizedBox(height: 16),
-                  Text(
-                    'วันที่: ${attendanceData!['date']} เวลา: ${attendanceData!['time']}',
-                    style: TextStyle(color: Colors.white70, fontSize: 16),
+                ),
+                SizedBox(height: 16),
+                ...students.map((student) => _buildStudentCard(student)).toList(),
+              ],
+            ),
+          ),
+          SizedBox(height: 24),
+          
+          // กราฟสถิติ
+          Container(
+            height: 200,
+            padding: EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black12,
+                  blurRadius: 6,
+                  offset: Offset(0, 2),
+                ),
+              ],
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'สถิติการเข้าเรียน',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF0D47A1),
                   ),
-                  SizedBox(height: 20),
-                  Row(
+                ),
+                SizedBox(height: 16),
+                Expanded(
+                  child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      _buildSummaryCard(
-                        'ทั้งหมด',
-                        summary['total'].toString(),
-                        Icons.people,
-                        Colors.white,
-                      ),
-                      _buildSummaryCard(
-                        'มาเรียน',
-                        summary['present'].toString(),
-                        Icons.check_circle,
-                        Colors.greenAccent,
-                      ),
-                      _buildSummaryCard(
-                        'ลา',
-                        summary['leave'].toString(),
-                        Icons.schedule,
-                        Colors.orangeAccent,
-                      ),
-                      _buildSummaryCard(
-                        'ขาดเรียน',
-                        summary['absent'].toString(),
-                        Icons.cancel,
-                        Colors.redAccent,
-                      ),
+                      _buildStatBar('มาเรียน', summary['present'], summary['total'], Colors.green),
+                      _buildStatBar('ลา', summary['leave'], summary['total'], Colors.orange),
+                      _buildStatBar('ขาดเรียน', summary['absent'], summary['total'], Colors.red),
                     ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-            SizedBox(height: 24),
-            
-            // รายละเอียดนักศึกษา
-            Container(
-              padding: EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(12),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black12,
-                    blurRadius: 6,
-                    offset: Offset(0, 2),
-                  ),
-                ],
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'รายละเอียดการเข้าเรียน',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF0D47A1),
-                    ),
-                  ),
-                  SizedBox(height: 16),
-                  ...students.map((student) => _buildStudentCard(student)).toList(),
-                ],
-              ),
-            ),
-            SizedBox(height: 24),
-            
-            // กราฟสถิติ
-            Container(
-              height: 200,
-              padding: EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(12),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black12,
-                    blurRadius: 6,
-                    offset: Offset(0, 2),
-                  ),
-                ],
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'สถิติการเข้าเรียน',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF0D47A1),
-                    ),
-                  ),
-                  SizedBox(height: 16),
-                  Expanded(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        _buildStatBar('มาเรียน', summary['present'], summary['total'], Colors.green),
-                        _buildStatBar('ลา', summary['leave'], summary['total'], Colors.orange),
-                        _buildStatBar('ขาดเรียน', summary['absent'], summary['total'], Colors.red),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

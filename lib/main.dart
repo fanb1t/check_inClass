@@ -320,174 +320,91 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('เช็คชื่อเข้าเรียน'),
-        automaticallyImplyLeading: false, // ไม่แสดงปุ่ม back
-        actions: [
-          IconButton(
-            icon: Icon(Icons.info_outline),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => CourseInfoScreen()),
+    return Column(
+      children: [
+        Expanded(
+          child: ListView.builder(
+            itemCount: students.length,
+            itemBuilder: (context, index) {
+              final student = students[index];
+              return Card(
+                margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                child: ListTile(
+                  leading: CircleAvatar(
+                    backgroundColor: Color(0xFF1976D2),
+                    child: Text(
+                      student.id,
+                      style: TextStyle(color: Colors.white, fontSize: 12),
+                    ),
+                  ),
+                  title: Text(student.name),
+                  subtitle: Row(
+                    children: [
+                      _buildStatusButton(
+                        icon: Icons.check_circle,
+                        label: 'มาเรียน',
+                        status: AttendanceStatus.present,
+                        student: student,
+                        index: index,
+                      ),
+                      SizedBox(width: 8),
+                      _buildStatusButton(
+                        icon: Icons.schedule,
+                        label: 'ลา',
+                        status: AttendanceStatus.leave,
+                        student: student,
+                        index: index,
+                      ),
+                      SizedBox(width: 8),
+                      _buildStatusButton(
+                        icon: Icons.cancel,
+                        label: 'ขาดเรียน',
+                        status: AttendanceStatus.absent,
+                        student: student,
+                        index: index,
+                      ),
+                    ],
+                  ),
+                ),
               );
             },
           ),
-        ],
-      ),
-      body: Column(
-        children: [
-          Container(
-            padding: EdgeInsets.all(16),
-            margin: EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: Color(0xFF1976D2),
-              borderRadius: BorderRadius.circular(12),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black26,
-                  blurRadius: 8,
-                  offset: Offset(0, 4),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Row(
+            children: [
+              Expanded(
+                child: ElevatedButton.icon(
+                  onPressed: _showAddStudentDialog,
+                  icon: Icon(Icons.person_add),
+                  label: Text('เพิ่มนักศึกษา'),
                 ),
-              ],
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'วันที่: ${DateTime.now().day}/${DateTime.now().month}/${DateTime.now().year}',
-                      style: TextStyle(color: Colors.white, fontSize: 16),
-                    ),
-                    Text(
-                      'เวลา: ${TimeOfDay.now().format(context)}',
-                      style: TextStyle(color: Colors.white70, fontSize: 14),
-                    ),
-                  ],
+              ),
+              SizedBox(width: 8),
+              Expanded(
+                child: ElevatedButton.icon(
+                  onPressed: _clearAttendance,
+                  icon: Icon(Icons.refresh),
+                  label: Text('ล้างค่า'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.orange,
+                    foregroundColor: Colors.white,
+                  ),
                 ),
-                Text(
-                  'จำนวนนักศึกษา: ${students.length}',
-                  style: TextStyle(color: Colors.white, fontSize: 16),
+              ),
+              SizedBox(width: 8),
+              Expanded(
+                child: ElevatedButton.icon(
+                  onPressed: _saveAttendance,
+                  icon: Icon(Icons.save),
+                  label: Text('บันทึกและดู Dashboard'),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
-          Expanded(
-            child: ListView.builder(
-              padding: EdgeInsets.symmetric(horizontal: 16),
-              itemCount: students.length,
-              itemBuilder: (context, index) {
-                final student = students[index];
-                return Card(
-                  margin: EdgeInsets.only(bottom: 8),
-                  elevation: 4,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: [Color(0xFFBBDEFB), Color(0xFFE1F5FE)],
-                        begin: Alignment.centerLeft,
-                        end: Alignment.centerRight,
-                      ),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: ListTile(
-                      leading: CircleAvatar(
-                        backgroundColor: Color(0xFF1976D2),
-                        child: Text(
-                          student.id,
-                          style: TextStyle(color: Colors.white, fontSize: 12),
-                        ),
-                      ),
-                      title: Text(
-                        student.name,
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Color(0xFF0D47A1),
-                        ),
-                      ),
-                      subtitle: Text(
-                        'สถานะ: ${_getStatusText(student.status)}',
-                        style: TextStyle(
-                          color: _getStatusColor(student.status),
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                      trailing: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          _buildStatusButton(
-                            icon: Icons.check_circle,
-                            label: 'มา',
-                            status: AttendanceStatus.present,
-                            student: student,
-                            index: index,
-                          ),
-                          SizedBox(width: 4),
-                          _buildStatusButton(
-                            icon: Icons.schedule,
-                            label: 'ลา',
-                            status: AttendanceStatus.leave,
-                            student: student,
-                            index: index,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                );
-              },
-            ),
-          ),
-          Container(
-            padding: EdgeInsets.all(16),
-            child: Row(
-              children: [
-                Expanded(
-                  child: ElevatedButton.icon(
-                    onPressed: _showAddStudentDialog,
-                    icon: Icon(Icons.person_add),
-                    label: Text('เพิ่มนักศึกษา'),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xFF1976D2),
-                      foregroundColor: Colors.white,
-                      padding: EdgeInsets.symmetric(vertical: 12),
-                    ),
-                  ),
-                ),
-                SizedBox(width: 8),
-                Expanded(
-                  child: ElevatedButton.icon(
-                    onPressed: _clearAttendance,
-                    icon: Icon(Icons.refresh),
-                    label: Text('ล้างค่า'),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.orange,
-                      foregroundColor: Colors.white,
-                      padding: EdgeInsets.symmetric(vertical: 12),
-                    ),
-                  ),
-                ),
-                SizedBox(width: 8),
-                Expanded(
-                  child: ElevatedButton.icon(
-                    onPressed: _saveAttendance,
-                    icon: Icon(Icons.save),
-                    label: Text('บันทึกและดู Dashboard'),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xFF0D47A1),
-                      foregroundColor: Colors.white,
-                      padding: EdgeInsets.symmetric(vertical: 12),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
