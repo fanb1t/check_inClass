@@ -1,0 +1,37 @@
+MaterialApp // ตัวแอปหลัก
+└── MainNavigation (StatefulWidget) // ตัวควบคุมเมนู
+    └── Scaffold // โครงสร้างหน้าหลัก
+        ├── AppBar // แถบหัวบนสุด
+        ├── body: Padding // เนื้อหาหลักของแต่ละหน้า
+        │   └── _pages[_selectedIndex] 
+        │       └── AttendanceScreen (StatefulWidget) // หน้าจัดการเช็คชื่อ
+        │           └── Column // วาง widget แนวตั้ง
+        │               ├── Expanded
+        │               │   └── ListView.builder // รายชื่อนักศึกษา (เลื่อนดูได้)
+        │               │       └── Card // กรอบแต่ละคน
+        │               │           └── ListTile
+        │               │               ├── leading: CircleAvatar // แสดงรหัสนักศึกษา
+        │               │               ├── title: Text // ชื่อนักศึกษา
+        │               │               └── subtitle: Row // ปุ่มเลือกสถานะ
+        │               │                   ├── _buildStatusButton (มาเรียน)
+        │               │                   ├── SizedBox(width: 8)
+        │               │                   ├── _buildStatusButton (ลา)
+        │               │                   ├── SizedBox(width: 8)
+        │               │                   └── _buildStatusButton (ขาดเรียน)
+        │               └── Padding // แถบปุ่มคำสั่งด้านล่าง
+        │                   └── Row
+        │                       ├── Expanded
+        │                       │   └── ElevatedButton.icon // ปุ่มเพิ่มนักศึกษา
+        │                       ├── SizedBox(width: 8)
+        │                       ├── Expanded
+        │                       │   └── ElevatedButton.icon // ปุ่มล้างค่า
+        │                       ├── SizedBox(width: 8)
+        │                       └── Expanded
+        │                           └── ElevatedButton.icon // ปุ่มบันทึกและดูสรุป
+        ├── floatingActionButton: _buildFAB() // ปุ่มเช็คชื่อใหญ่ตรงกลางล่าง
+        ├── floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked
+        └── bottomNavigationBar: BottomAppBar // เมนูด้านล่าง
+            └── Row
+                ├── _buildNavItem (Dashboard)
+                ├── SizedBox(width: 56) // ช่องว่างสำหรับ FAB
+                └── _buildNavItem (ข้อมูลรายวิชา)

@@ -1,0 +1,64 @@
+DashboardScreen (StatelessWidget)
+└── build
+    ├── if (attendanceData == null)
+    │   └── Center
+    │       └── Column // แจ้งว่ายังไม่มีข้อมูล
+    │           ├── Icon (info_outline)
+    │           ├── SizedBox
+    │           ├── Text ('ยังไม่มีข้อมูลการเช็คชื่อ')
+    │           ├── SizedBox
+    │           └── Text ('กรุณาบันทึกการเช็คชื่อก่อน')
+    │
+    └── else
+        └── SingleChildScrollView (padding: 16)
+            └── Column (crossAxisAlignment: start)
+                ├── Container // สรุปการเข้าเรียน (header)
+                │   └── Column
+                │       ├── Text ('สรุปการเข้าเรียน')
+                │       ├── SizedBox
+                │       ├── Text (วันที่/เวลา)
+                │       ├── SizedBox
+                │       └── Row (mainAxisAlignment: spaceEvenly)
+                │           ├── _buildSummaryCard ('ทั้งหมด')
+                │           ├── _buildSummaryCard ('มาเรียน')
+                │           ├── _buildSummaryCard ('ลา')
+                │           └── _buildSummaryCard ('ขาดเรียน')
+                │
+                ├── SizedBox
+                │
+                ├── Container // รายละเอียดนักศึกษา
+                │   └── Column (crossAxisAlignment: start)
+                │       ├── Text ('รายละเอียดการเข้าเรียน')
+                │       ├── SizedBox
+                │       └── ...students.map(_buildStudentCard) // รายการนักศึกษาแต่ละคน
+                │           └── _buildStudentCard
+                │               └── Container (margin, padding, gradient, border)
+                │                   └── Row
+                │                       ├── CircleAvatar (รหัส)
+                │                       ├── SizedBox
+                │                       ├── Expanded
+                │                       │   └── Text (ชื่อ)
+                │                       └── Container (สถานะ)
+                │                           └── Row
+                │                               ├── Icon (สถานะ)
+                │                               ├── SizedBox
+                │                               └── Text (สถานะ)
+                │
+                ├── SizedBox
+                │
+                └── Container // กราฟสถิติ
+                    └── Column (crossAxisAlignment: start)
+                        ├── Text ('สถิติการเข้าเรียน')
+                        ├── SizedBox
+                        └── Expanded
+                            └── Row (mainAxisAlignment: spaceEvenly, crossAxisAlignment: end)
+                                ├── _buildStatBar ('มาเรียน')
+                                ├── _buildStatBar ('ลา')
+                                └── _buildStatBar ('ขาดเรียน')
+                                    └── Column
+                                        ├── Expanded
+                                        │   └── Container (bar background)
+                                        │       └── FractionallySizedBox (bar fill)
+                                        ├── SizedBox
+                                        ├── Text (value)
+                                        └── Text (label)

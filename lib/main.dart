@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 import 'screen/dashboard.dart';
 import 'screen/course_info.dart';
 
+
+/// จุดเริ่มต้นของแอป
 void main() {
   runApp(MyApp());
 }
 
+/// คลาสหลักของแอป กำหนดธีมและหน้าแรก
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -36,7 +39,7 @@ class MyApp extends StatelessWidget {
   }
 }
 
-// เพิ่ม MainNavigation สำหรับควบคุมหน้าและเมนูด้านล่าง
+/// คลาสควบคุม Navigation หลักและเมนูต่างๆ
 class MainNavigation extends StatefulWidget {
   @override
   State<MainNavigation> createState() => _MainNavigationState();
@@ -49,27 +52,27 @@ class _MainNavigationState extends State<MainNavigation> {
   void _onAttendanceSaved(Map<String, dynamic> data) {
     setState(() {
       _attendanceData = data;
-      _selectedIndex = 0; // ไปยังหน้า Dashboard
+      _selectedIndex = 0; // ไปยังหน้า สรุปการเข้าเรียน
     });
   }
 
   final List<String> _titles = [
-    'Dashboard การเข้าเรียน',
+    'สรุปการเข้าเรียน',
     'เช็คชื่อเข้าเรียน',
     'ข้อมูลรายวิชา',
   ];
 
-  // FloatingActionButton สำหรับปุ่มเช็คชื่อ
+  // ปรับขนาด FAB ให้เล็กลง
   Widget _buildFAB() {
-    return Container(
-      height: 72,
-      width: 72,
+    return SizedBox(
+      height: 56,
+      width: 56,
       child: FloatingActionButton(
         backgroundColor: Color(0xFF1976D2),
-        elevation: 8,
+        elevation: 6,
         onPressed: () => _onItemTapped(1),
-        child: Icon(Icons.checklist, size: 36, color: Colors.white),
-        shape: CircleBorder(side: BorderSide(color: Colors.white, width: 4)),
+        child: Icon(Icons.checklist, size: 28, color: Colors.white),
+        shape: CircleBorder(side: BorderSide(color: Colors.white, width: 3)),
       ),
     );
   }
@@ -93,24 +96,28 @@ class _MainNavigationState extends State<MainNavigation> {
         title: Text(_titles[_selectedIndex]),
         automaticallyImplyLeading: false,
       ),
-      body: _pages[_selectedIndex],
+      body: Padding(
+        // เพิ่ม padding ด้านล่างเพื่อกันเนื้อหาถูกบัง
+        padding: const EdgeInsets.only(bottom: 60),
+        child: _pages[_selectedIndex],
+      ),
       floatingActionButton: _buildFAB(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: BottomAppBar(
         shape: CircularNotchedRectangle(),
-        notchMargin: 10,
+        notchMargin: 6,
         color: Color(0xFF1565C0),
-        child: Container(
-          height: 64,
+        child: SizedBox(
+          height: 52, // ปรับความสูงให้เล็กลง
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               _buildNavItem(
                 icon: Icons.dashboard,
-                label: 'Dashboard',
+                label: 'สรุปการเข้าเรียน',
                 index: 0,
               ),
-              SizedBox(width: 72), // ช่องว่างสำหรับ FAB
+              SizedBox(width: 56), // ช่องว่างสำหรับ FAB
               _buildNavItem(
                 icon: Icons.info_outline,
                 label: 'ข้อมูลรายวิชา',
@@ -123,6 +130,7 @@ class _MainNavigationState extends State<MainNavigation> {
     );
   }
 
+  /// สร้างปุ่มเมนูแต่ละอันใน BottomNavBar
   Widget _buildNavItem({
     required IconData icon,
     required String label,
@@ -138,14 +146,14 @@ class _MainNavigationState extends State<MainNavigation> {
           Icon(
             icon,
             color: isSelected ? Colors.amber : Colors.white70,
-            size: 28,
+            size: 24,
           ),
           Text(
             label,
             style: TextStyle(
               color: isSelected ? Colors.amber : Colors.white70,
               fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-              fontSize: 13,
+              fontSize: 12,
             ),
           ),
         ],
@@ -154,6 +162,7 @@ class _MainNavigationState extends State<MainNavigation> {
   }
 }
 
+/// คลาสข้อมูลนักศึกษา
 class Student {
   final String id;
   final String name;
@@ -166,9 +175,10 @@ class Student {
   });
 }
 
+/// สถานะการเข้าเรียน
 enum AttendanceStatus { present, absent, leave }
 
-// ปรับ AttendanceScreen ให้รองรับปุ่มล้างค่า
+/// หน้าสำหรับเช็คชื่อและจัดการนักศึกษา
 class AttendanceScreen extends StatefulWidget {
   final Function(Map<String, dynamic>) onAttendanceSaved;
 
@@ -374,7 +384,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.only(left: 16, right: 16, bottom: 8, top: 8),
           child: Row(
             children: [
               Expanded(
@@ -401,7 +411,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                 child: ElevatedButton.icon(
                   onPressed: _saveAttendance,
                   icon: Icon(Icons.save),
-                  label: Text('บันทึกและดู Dashboard'),
+                  label: Text('บันทึกและดูสรุป'),
                 ),
               ),
             ],
@@ -411,6 +421,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
     );
   }
 
+  /// สร้างปุ่มเลือกสถานะการเข้าเรียนแต่ละแบบ
   Widget _buildStatusButton({
     required IconData icon,
     required String label,

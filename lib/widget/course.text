@@ -1,0 +1,48 @@
+CourseInfoScreen (StatefulWidget)
+└── build
+    └── SingleChildScrollView (padding: 16) // ให้เลื่อนดูได้ทั้งหน้า
+        └── Column
+            ├── Row (mainAxisAlignment: end) // ปุ่มแก้ไข/บันทึก/ยกเลิก
+            │   ├── if (!isEditing)
+            │   │   └── ElevatedButton.icon (แก้ไข)
+            │   └── if (isEditing)
+            │       ├── ElevatedButton.icon (บันทึก)
+            │       ├── SizedBox(width: 8)
+            │       └── OutlinedButton.icon (ยกเลิก)
+            │
+            ├── SizedBox(height: 8)
+            │
+            ├── Container (Header Card) // การ์ดหัวเรื่อง
+            │   └── Column
+            │       ├── Icon (school)
+            │       ├── SizedBox(height: 12)
+            │       └── Text ('ข้อมูลรายวิชา' หรือ 'แก้ไขข้อมูลรายวิชา')
+            │
+            ├── SizedBox(height: 24)
+            │
+            └── Container (ข้อมูลรายวิชา)
+                └── Column
+                    ├── _buildInfoField ('ชื่อรายวิชา', ...)
+                    ├── SizedBox(height: 16)
+                    ├── _buildInfoField ('รหัสวิชา', ...)
+                    ├── SizedBox(height: 16)
+                    ├── _buildInfoField ('อาจารย์ผู้สอน', ...)
+                    ├── SizedBox(height: 16)
+                    ├── _buildInfoField ('วันเวลาเรียน', ...)
+                    ├── SizedBox(height: 16)
+                    ├── _buildInfoField ('ห้องเรียน', ...)
+                    ├── SizedBox(height: 16)
+                    └── _buildInfoField ('คำอธิบายรายวิชา', ..., maxLines: 3)
+
+_buildInfoField (แต่ละช่องข้อมูล)
+└── Column (crossAxisAlignment: start)
+    ├── Row
+    │   ├── Icon (หัวข้อ)
+    │   ├── SizedBox(width: 8)
+    │   └── Text (ชื่อหัวข้อ)
+    ├── SizedBox(height: 8)
+    └── Container (พื้นหลังช่องข้อมูล)
+        └── isEditing ?
+            └── TextField (แก้ไขข้อมูล)
+            └── หรือ
+            └── Text (แสดงข้อมูล)

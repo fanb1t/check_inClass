@@ -27,11 +27,11 @@ class _CourseInfoScreenState extends State<CourseInfoScreen> {
   bool isEditing = false;
   CourseInfo courseInfo = CourseInfo(
     courseName: 'การพัฒนาแอปพลิเคชันมือถือ',
-    courseCode: 'CS301',
-    instructor: 'อาจารย์สมชาย ใจดี',
-    schedule: 'จันทร์-พุธ 13:00-15:00',
-    room: 'ห้อง 301 อาคารวิทยาศาสตร์',
-    description: 'รายวิชานี้เป็นการเรียนรู้การพัฒนาแอปพลิเคชันมือถือด้วย Flutter และ Dart สำหรับระบบปฏิบัติการ Android และ iOS',
+    courseCode: 'ABCDEF',
+    instructor: 'อาจารย์A',
+    schedule: 'จันทร์ 13.00 - 17.50 นาที',
+    room: 'ห้อง 51c304 อาคารC',
+    description: 'รายวิชานี้เป็นการเรียนรู้การพัฒนาแอปพลิเคชันมือถือด้วย Flutter และ Dart สำหรับระบบปฏิบัติการ Android',
   );
 
   late TextEditingController _courseNameController;
@@ -97,6 +97,54 @@ class _CourseInfoScreenState extends State<CourseInfoScreen> {
       padding: EdgeInsets.all(16),
       child: Column(
         children: [
+          // ปุ่มแก้ไข/บันทึก/ยกเลิก
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              if (!isEditing)
+                ElevatedButton.icon(
+                  onPressed: _toggleEdit,
+                  icon: Icon(Icons.edit),
+                  label: Text('แก้ไข'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Color(0xFF1976D2),
+                    foregroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                ),
+              if (isEditing) ...[
+                ElevatedButton.icon(
+                  onPressed: _toggleEdit,
+                  icon: Icon(Icons.save),
+                  label: Text('บันทึก'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.green,
+                    foregroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                ),
+                SizedBox(width: 8),
+                OutlinedButton.icon(
+                  onPressed: _cancelEdit,
+                  icon: Icon(Icons.cancel),
+                  label: Text('ยกเลิก'),
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: Colors.red,
+                    side: BorderSide(color: Colors.red),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                ),
+              ],
+            ],
+          ),
+          SizedBox(height: 8),
+
           // Header Card
           Container(
             width: double.infinity,
